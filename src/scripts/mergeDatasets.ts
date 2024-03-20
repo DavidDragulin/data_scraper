@@ -10,22 +10,25 @@ const mergeCsvFiles = async (
   outputPath: string
 ) => {
   try {
-    const file1Data = await readFromCSV(file1Path); // Read first file
-    const file2Data = await readFromCSV(file2Path); // Read second file
+    const file1Data = await readFromCSV(file1Path); // Read the first file (company names)
+    const file2Data = await readFromCSV(file2Path); // Read the second file (scraped data)
     const mergedData: any[] = [];
 
+    // Iterate through the first file to preserve all company name information
     file1Data.forEach((row1) => {
       const row2 = file2Data.find((row) => row.domain === row1.domain);
       if (row2) {
-        // Merge data based on domain
+        const dataField = JSON.parse(row2.data); // Parse the JSON string to extract fields
+
+        // Merge data based on domain, including the address now
         mergedData.push({
           domain: row1.domain,
           company_commercial_name: row1.company_commercial_name,
           company_legal_name: row1.company_legal_name,
           company_all_available_names: row1.company_all_available_names,
-          phone_numbers: row2.phoneNumbers,
-          social_media_links: row2.socialMediaLinks,
-          address: row2.address,
+          phone_numbers: dataField.phoneNumbers || [], // Extracted from the parsed JSON
+          social_media_links: dataField.socialMediaLinks || [], // Extracted from the parsed JSON
+          address: dataField.address || "", // Extract the address, providing a fallback
         });
       }
     });

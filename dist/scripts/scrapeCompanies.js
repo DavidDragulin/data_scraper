@@ -20,6 +20,7 @@ let successfulCrawls = 0;
 let phoneNumbersExtracted = 0;
 let socialMediaLinksExtracted = 0;
 let addressesExtracted = 0;
+let unsuccessfulCrawls = 0;
 const startScraping = () => __awaiter(void 0, void 0, void 0, function* () {
     const startTime = Date.now();
     const inputFilePath = "./data/sample-websites.csv";
